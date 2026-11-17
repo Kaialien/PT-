@@ -53,3 +53,22 @@ def validate_inputs(pages: List[str], frames_count) -> int:
     if frames_count < 1:
         raise ValueError("Number of frames must be at least 1.")
     return frames_count
+
+
+def _padded(frames: List[str], frames_count: int) -> List[str]:
+    return list(frames) + ["-"] * (frames_count - len(frames))
+
+
+def _build_result(name, pages, frames_count, hits, faults, trace, frames) -> Result:
+    total = len(pages)
+    return Result(
+        algorithm=name,
+        frames_count=frames_count,
+        total_refs=total,
+        hits=hits,
+        faults=faults,
+        hit_ratio=hits / total,
+        fault_ratio=faults / total,
+        final_frames=_padded(frames, frames_count),
+        trace=trace,
+    )
